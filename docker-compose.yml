@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  service_01:
+    build: ./service
+    container_name: service_01
+    privileged: true
+    volumes:
+      - ./service_01/service_01.html:/usr/share/nginx/html/index.html:ro
+    networks:
+      - main_network
+
+  service_02:
+    build: ./service
+    container_name: service_02
+    privileged: true
+    volumes:
+      - ./service_02/service_02.html:/usr/share/nginx/html/index.html:ro
+    networks:
+      - main_network
+      
+networks:
+  main_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/24
