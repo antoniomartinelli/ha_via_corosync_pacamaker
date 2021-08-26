@@ -3,10 +3,8 @@
 
 # Setup the client with nodes hostnames (ips can be used)
 systemctl start pcsd
-#(echo 'hacluster'; echo 'S!n;_8M^M?rDRyKD') | pcs cluster auth service_01 service_02
-(echo 'S!n;_8M^M?rDRyKD') | pcs host auth service_01 service_02 -u hacluster
-
-pcs cluster setup test_cluster service_01 service_02
+(echo 'hacluster'; echo 'somepassword') | pcs cluster auth service_01 service_02
+pcs cluster setup --name test_cluster service_01 service_02
 pcs cluster start --all
 pcs cluster enable --all
 
@@ -30,10 +28,10 @@ op stop timeout=180s \
 op status timeout=15
 
 # Colocation and order constraints
-pcs constraint colocation add webserver with floating_ip INFINITY
+pcs constraint colocation add webserver floating_ip INFINITY
 pcs constraint order floating_ip then webserver
 
-pcs constraint colocation add shellscript with webserver INFINITY
+pcs constraint colocation add shellscript webserver INFINITY
 pcs constraint order floating_ip then shellscript
 
 

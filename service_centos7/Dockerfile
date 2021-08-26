@@ -1,4 +1,4 @@
-FROM centos:8
+FROM centos:7
 
 EXPOSE 2224 
 EXPOSE 80
@@ -8,13 +8,11 @@ RUN yum install epel-release -y
 RUN yum install -y nginx
 
 # Install Corosync and pacemaker
-RUN sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/*-HighAvailability.repo
-RUN yum update -y
-RUN dnf install --assumeyes pacemaker corosync pcs which passwd
-#RUN corosync-keygen #it can come in handy if there are problem with authentication
+RUN yum install -y corosync pacemaker pcs haveged which
+RUN corosync-keygen
 
 # Change password for hacluster user
-RUN (echo 'S!n;_8M^M?rDRyKD'; echo 'S!n;_8M^M?rDRyKD') | passwd hacluster
+RUN (echo 'somepassword'; echo 'somepassword') | passwd hacluster
 
 RUN systemctl enable pcsd
 RUN systemctl enable corosync

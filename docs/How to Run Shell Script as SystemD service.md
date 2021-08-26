@@ -59,13 +59,18 @@ op status timeout=15
 
 # Extra
 ## Constraints
-You can determine the behavior of a resource in a cluster by configuring constraints for that resource. You can configure the following categories of constraints:
+You can determine the behavior of a resource in a cluster by configuring constraints for that resource. You can configure the following categories of constraints:ß
 * **location constraints** — A location constraint determines which nodes a resource can run on.
 * **order constraints** — An order constraint determines the order in which the resources run.
 * **colocation constraints** — A colocation constraint determines whßere resources will be placed relative to other resources.
 
 ## Alerts
-
+TO-DO: Testing...
+```
+pcs alert create id=alertscript path=/home/alertscript.sh
+touch /home/test.log
+pcs alert recipient add alertscript value=/home/test.log
+```
 
 ## Resouces
 For LSB services:
@@ -74,3 +79,6 @@ For LSB services:
 In case you want to create an OCF Resource Agent:
 * https://serverfault.com/questions/964396/cluster-a-custom-application
 * https://github.com/ClusterLabs/resource-agents/blob/00ae6a179d95471bd7ce37197b97bd9498c539a1/heartbeat/anything
+
+Alerting:
+* https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_high_availability_clusters/assembly_configuring-pacemaker-alert-agents_configuring-and-managing-high-availability-clusters
