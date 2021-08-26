@@ -32,7 +32,7 @@ systemctl enable shellscript.service
 ```
  
 # Run the custom SystemD service as a Corosync/Pacemaker Resource Agent
-
+**IMPORTANT NOTE**
 **Make sure the services are installed on every node of the cluster!**
 
 1. Check that the RA is in the list of the resource agents under the systemd provider (it shoulud appear also as generic linux service)
@@ -52,11 +52,20 @@ op status timeout=15
 
 ```
 *interval*: set the frequency for the operation
-
+ß
 *timeout*: if the operation does not comlete by the amount set, abort the operation and consider it failed
 
 
+
 # Extra
+## Constraints
+You can determine the behavior of a resource in a cluster by configuring constraints for that resource. You can configure the following categories of constraints:
+* **location constraints** — A location constraint determines which nodes a resource can run on.
+* **order constraints** — An order constraint determines the order in which the resources run.
+* **colocation constraints** — A colocation constraint determines whßere resources will be placed relative to other resources.
+
+## Alerts
+
 
 ## Resouces
 For LSB services:

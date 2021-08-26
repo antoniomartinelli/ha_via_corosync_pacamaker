@@ -20,6 +20,8 @@ corosync-cmapctl | grep members
 pcs status nodes
 
 pcs cluster stop service_01
+
+pcs resource move resource_id [destination_node]
 ```
 
 ## Resources
