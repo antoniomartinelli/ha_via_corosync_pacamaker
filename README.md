@@ -3,8 +3,8 @@ A cluter of the nodes runs a floating ip service and an nginx service. Both node
 
 ## Instructions
 1. *start.sh*
-2. Access to service_01 shell via *docker exec -ti service_01 /bin/bash* (It can be done with any node)
-3. In service_01 launch *run.sh* that setup the cluster and the services
+2. Access to service\_01 shell via *docker exec -ti service_01 /bin/bash* (It can be done with any node)
+3. In service\_01 launch *run.sh* that setup the cluster and the services
 4. Test the availability of the web service on 172.28.0.100
 
 

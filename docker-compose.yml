@@ -9,6 +9,8 @@ services:
       - ./service_01/service_01.html:/usr/share/nginx/html/index.html:ro
     networks:
       - main_network
+    ports:
+      - 2224:2224
 
   service_02:
     build: ./service

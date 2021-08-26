@@ -1,4 +1,5 @@
 #!/bin/bash
+# IMPORTANT: This script is launched after the SystemD init
 
 # Setup the client with nodes hostnames (ips can be used)
 systemctl start pcsd
@@ -12,10 +13,19 @@ pcs property set stonith-enabled=false
 # disable quorum 
 pcs property set no-quorum-policy=ignore
 
-# Create floating ip (use an address in the same subnet)
+# Enable the custom service (is it needed?) 
+systemctl enable shellscript.service
+
+# Create floating ip resource (use an address in the same subnet)
 pcs resource create floating_ip ocf:heartbeat:IPaddr2 ip=172.28.0.100 cidr_netmask=24 op monitor interval=30s
-# Create a dummy nginx service
+# Create a dummy nginx resource
 pcs resource create webserver ocf:heartbeat:nginx configfile=/etc/nginx/nginx.conf op monitor timeout="5s" interval="5s"
+# Create the custom resource
+pcs resource create shellscript_resource systemd:shellscript \
+op monitor interval=30s \
+op start timeout=180s \
+op stop timeout=180s \
+op status timeout=15
 
 # Colocation and order constraints
 pcs constraint colocation add webserver floating_ip INFINITY

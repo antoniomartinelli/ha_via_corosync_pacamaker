@@ -19,9 +19,16 @@ RUN systemctl enable pcsd
 RUN systemctl enable corosync
 RUN systemctl enable pacemaker
 
-# Run script to execute after the systemd init
+# Script to execute after the systemd init to configure the cluster
 WORKDIR /home
 COPY ./run.sh ./
 RUN chmod +x /home/run.sh
+
+#Custom script as SystemD service
+COPY ./shellscript.sh ./
+RUN chmod +x shellscript.sh
+
+# SystemD service wrapper for the custom script 
+COPY ./shellscript.service  /lib/systemd/system/.
 
 CMD ["/usr/sbin/init"]
