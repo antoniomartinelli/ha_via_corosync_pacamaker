@@ -3,8 +3,8 @@
 
 # Setup the client with nodes hostnames (ips can be used)
 systemctl start pcsd
-(echo 'hacluster'; echo 'somepassword') | pcs cluster auth service_01 service_02
-pcs cluster setup --name test_cluster service_01 service_02
+(echo 'hacluster'; echo 'somepassword') | pcs cluster auth node_01 node_02
+pcs cluster setup --name test_cluster node_01 node_02
 pcs cluster start --all
 pcs cluster enable --all
 

@@ -3,7 +3,7 @@ A cluter of the nodes runs a floating ip service and an nginx service. Both node
 
 ## Instructions
 1. *start.sh*
-2. Access to service\_01 shell via *docker exec -ti service_01 /bin/bash* (It can be done with any node)
+2. Access to service\_01 shell via *docker exec -ti node_01 /bin/bash* (It can be done with any node)
 3. In service\_01 launch *run.sh* that setup the cluster and the services
 4. Test the availability of the web service on 172.28.0.100
 
@@ -19,7 +19,7 @@ corosync-cmapctl | grep members
 
 pcs status nodes
 
-pcs cluster stop service_01 --force
+pcs cluster stop node_01 --force
 
 pcs resource move resource_id [destination_node]
 ```
@@ -55,6 +55,8 @@ Description=My Shell Script
 
 [Service]
 ExecStart=/home/shellscript.sh
+Restart=always
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
@@ -89,7 +91,6 @@ op status timeout=15
 *interval*: set the frequency for the operation
 ß
 *timeout*: if the operation does not comlete by the amount set, abort the operation and consider it failed
-
 
 
 ## Extra

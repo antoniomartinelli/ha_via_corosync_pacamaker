@@ -1,23 +1,23 @@
 version: '3'
 
 services:
-  service_01:
+  node_01:
     build: ./service
-    container_name: service_01
+    container_name: node_01
     privileged: true
     volumes:
-      - ./service_01/service_01.html:/usr/share/nginx/html/index.html:ro
+      - ./node_01/node_01.html:/usr/share/nginx/html/index.html:ro
     networks:
       - main_network
     ports:
       - 2224:2224
 
-  service_02:
+  node_02:
     build: ./service
-    container_name: service_02
+    container_name: node_02
     privileged: true
     volumes:
-      - ./service_02/service_02.html:/usr/share/nginx/html/index.html:ro
+      - ./node_02/node_02.html:/usr/share/nginx/html/index.html:ro
     networks:
       - main_network
       
