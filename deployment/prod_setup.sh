@@ -23,11 +23,24 @@ systemctl enable pcsd
 systemctl enable corosync
 systemctl enable pacemaker
 
-# Custom script as SystemD service
+##### Scripts as SystemD service
+# Custom Service 1
 chmod +x shellscript.sh
 cp shellscript.sh /tmp/shellscript.sh
-
 # SystemD service wrapper for the custom script 
 cp shellscript.service  /lib/systemd/system/.
+
+# # Custom Service 2
+# chmod +x shellscript.sh
+# cp shellscript.sh /tmp/shellscript.sh
+# # SystemD service wrapper for the custom script 
+# cp shellscript.service  /lib/systemd/system/.
+
+# # Custom Service 3
+# chmod +x shellscript.sh
+# cp shellscript.sh /tmp/shellscript.sh
+# # SystemD service wrapper for the custom script 
+# cp shellscript.service  /lib/systemd/system/.
+
 # Enable the custom service (Not needed if the service is used as RA by CS/PM) 
 #systemctl enable shellscript.service

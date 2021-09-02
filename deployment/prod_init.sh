@@ -24,12 +24,39 @@ pcs property set no-quorum-policy=ignore
 pcs resource create floating_ip ocf:heartbeat:IPaddr2 ip=$dmcf_floating_ip cidr_netmask=24 \
 op monitor interval=30s
 
-# Create the custom resource
+# # Create the mysql resource (Not needed)
+# pcs resource create mysql ocf:heartbeat:mysql \
+#   params binary="/usr/sbin/mysqld" \
+#          datadir="/var/lib/mysql1" \
+#          pid="/var/run/mysqld/mysql1.pid" \
+#          socket="/var/run/mysqld/mysql1.sock" \
+#          log="/var/run/mysqld/mysql1.log" \
+#          additional_parameters="--bind-address=192.168.122.109" \
+#   op start timeout=180s \
+#   op stop timeout=180s \
+#   op monitor timeout=30s interval=10s
+
+
+# Create the custom resource 1
 pcs resource create shellscript systemd:shellscript \
 op monitor interval=30s \
 op start timeout=180s \
 op stop timeout=180s \
 op status timeout=15
+
+# # Create the custom resource 2
+# pcs resource create shellscript systemd:shellscript \
+# op monitor interval=30s \
+# op start timeout=180s \
+# op stop timeout=180s \
+# op status timeout=15
+
+# # Create the custom resource 3
+# pcs resource create shellscript systemd:shellscript \
+# op monitor interval=30s \
+# op start timeout=180s \
+# op stop timeout=180s \
+# op status timeout=15
 
 # Colocation and order constraints
 pcs constraint colocation add shellscript with floating_ip INFINITY
