@@ -1,0 +1,8 @@
+[Unit]
+Description=DMCF Galsee Monitorning Data
+
+[Service]
+ExecStart=python3.6 /home/davide/Desktop/dmcf-galsee-2.0/SW-env/Code/Monitoring_data.py
+
+[Install]
+WantedBy=multi-user.target

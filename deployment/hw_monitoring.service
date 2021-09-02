@@ -1,0 +1,8 @@
+[Unit]
+Description=DMCF Galsee HW Monitorning
+
+[Service]
+ExecStart=python3.6 /home/davide/Desktop/dmcf-galsee-2.0/SW-env/Code/HW_monitoring.py
+
+[Install]
+WantedBy=multi-user.target

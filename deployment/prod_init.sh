@@ -2,16 +2,13 @@
 # This initialization script needs to be launched one time, 
 # only on a single node of the cluster.
 
-# Define DMCFs IPs
-dmcf_a=localhost
-dmcf_b=localhost
-dmcf_floating_ip=127.0.0.1
+# Define DMCF floating IP address
+dmcf_floating_ip=192.168.8.100
 
 # Setup the client with nodes hostnames (ips can be used)
-systemctl start pcsd
-(echo 'S!n;_8M^M?rDRyKD') | pcs host auth $dmcf_a $dmcf_b -u hacluster
+(echo 'S!n;_8M^M?rDRyKD') | pcs host auth dmcfa dmcfb -u hacluster
 
-pcs cluster setup dmcf_cluster $dmcf_a $dmcf_b
+pcs cluster setup dmcf_cluster dmcfa dmcfb
 pcs cluster start --all
 pcs cluster enable --all
 
@@ -21,8 +18,9 @@ pcs property set stonith-enabled=false
 pcs property set no-quorum-policy=ignore
 
 # Create floating ip resource (use an address in the same subnet)
-pcs resource create floating_ip ocf:heartbeat:IPaddr2 ip=$dmcf_floating_ip cidr_netmask=24 \
-op monitor interval=30s
+pcs resource create floating_ip ocf:heartbeat:IPaddr2 \
+	ip=$dmcf_floating_ip cidr_netmask=24 \
+	op monitor interval=30s
 
 # # Create the mysql resource (Not needed)
 # pcs resource create mysql ocf:heartbeat:mysql \
@@ -38,29 +36,32 @@ op monitor interval=30s
 
 
 # Create the custom resource 1
-pcs resource create shellscript systemd:shellscript \
+#pcs resource create shellscript systemd:shellscript \
+#op monitor interval=30s \
+#op start timeout=180s \
+#op stop timeout=180s \
+#op status timeout=15s
+
+# Create the monitoring_data resource
+pcs resource create monitoring_data systemd:monitoring_data \
 op monitor interval=30s \
 op start timeout=180s \
 op stop timeout=180s \
-op status timeout=15
+op status timeout=15s
 
-# # Create the custom resource 2
-# pcs resource create shellscript systemd:shellscript \
-# op monitor interval=30s \
-# op start timeout=180s \
-# op stop timeout=180s \
-# op status timeout=15
-
-# # Create the custom resource 3
-# pcs resource create shellscript systemd:shellscript \
-# op monitor interval=30s \
-# op start timeout=180s \
-# op stop timeout=180s \
-# op status timeout=15
+# Create the hw_monitoring resource
+pcs resource create hw_monitoring systemd:hw_monitoring \
+op monitor interval=30s \
+op start timeout=180s \
+op stop timeout=180s \
+op status timeout=15s
 
 # Colocation and order constraints
-pcs constraint colocation add shellscript with floating_ip INFINITY
-pcs constraint order floating_ip then shellscript
+#pcs constraint colocation add shellscript with floating_ip INFINITY
+pcs constraint colocation add monitoring_data with floating_ip INFINITY
+pcs constraint colocation add hw_monitoring with floating_ip INFINITY
+pcs constraint order floating_ip then monitoring_data
+pcs constraint order floating_ip then hw_monitoring
 
 pcs cluster start --all
 pcs cluster enable --all

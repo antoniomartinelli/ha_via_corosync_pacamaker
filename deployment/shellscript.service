@@ -1,8 +1,0 @@
-[Unit]
-Description=My Custom Shell Script
-
-[Service]
-ExecStart=/tmp/shellscript.sh
-
-[Install]
-WantedBy=multi-user.target
