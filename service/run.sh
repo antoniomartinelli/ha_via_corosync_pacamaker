@@ -14,6 +14,8 @@ pcs cluster enable --all
 pcs property set stonith-enabled=false
 # disable quorum 
 pcs property set no-quorum-policy=ignore
+# set fail 
+pcs property set start-failure-is-fatal=false
 
 # Enable the custom service (Not needed if the service is used as RA by CS/PM) 
 #systemctl enable shellscript.service
@@ -36,6 +38,8 @@ pcs constraint order floating_ip then webserver
 pcs constraint colocation add shellscript with webserver INFINITY
 pcs constraint order floating_ip then shellscript
 
+# Add migration-threhsold (do not migrate until INFINITY failures are reached)
+pcs resource meta shellscript migration-threshold=INFINITY
 
 pcs cluster start --all
 pcs cluster enable --all

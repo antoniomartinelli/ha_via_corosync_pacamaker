@@ -22,6 +22,8 @@ pcs status nodes
 pcs cluster stop node_01 --force
 
 pcs resource move resource_id [destination_node]
+
+pcs resource failcount show shellscript
 ```
 
 ## Resources
