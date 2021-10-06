@@ -26,22 +26,18 @@ systemctl enable corosync
 systemctl enable pacemaker
 systemctl start pcsd
 
-##### Scripts as SystemD service
-# Custom Service 1
-#chmod +x shellscript.sh
-#cp shellscript.sh /tmp/shellscript.sh
-#cp shellscript.service  /lib/systemd/system/.
-#systemctl enable shellscript.service
+# Copy DMCF software files in /opt
+# cp ../select/folder/ /opt/galsee
 
-# Service monitoring_data.py
-# chmod +x Monitoring_data.py
-cp monitoring_data.service  /lib/systemd/system/.
-systemctl enable monitoring_data.service
+# Scripts as SystemD service
+# copy services in systemd 
+cp systemd_services/*  /lib/systemd/system/.
 
-# Service HW_monitoring.py
-# chmod +x HW_monitoring.sh
-cp hw_monitoring.service  /lib/systemd/system/.
-systemctl enable hw_monitoring.service 
+# Enabling services is not need if they are handled by pacemaker
+systemctl enable dmcf_hw_monitoring_data.service
+systemctl enable dmcf_uaf_monitoring.service 
+systemctl enable dmcf_monitoring_data.service 
+systemctl enable dmcf_data_to_uaf.service 
 
 # Enable the services (not needed if the service is used as RA by CS/PM)
 systemctl daemon-reload

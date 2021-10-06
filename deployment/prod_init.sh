@@ -18,50 +18,60 @@ pcs property set stonith-enabled=false
 pcs property set no-quorum-policy=ignore
 
 # Create floating ip resource (use an address in the same subnet)
-pcs resource create floating_ip ocf:heartbeat:IPaddr2 \
-	ip=$dmcf_floating_ip cidr_netmask=24 \
-	op monitor interval=30s
+pcs resource create floating_ip ocf:heartbeat:IPaddr2 ip=$dmcf_floating_ip cidr_netmask=24 \
+op monitor interval=30s
 
-# # Create the mysql resource (Not needed)
-# pcs resource create mysql ocf:heartbeat:mysql \
-#   params binary="/usr/sbin/mysqld" \
-#          datadir="/var/lib/mysql1" \
-#          pid="/var/run/mysqld/mysql1.pid" \
-#          socket="/var/run/mysqld/mysql1.sock" \
-#          log="/var/run/mysqld/mysql1.log" \
-#          additional_parameters="--bind-address=192.168.122.109" \
-#   op start timeout=180s \
-#   op stop timeout=180s \
-#   op monitor timeout=30s interval=10s
-
-
-# Create the custom resource 1
-#pcs resource create shellscript systemd:shellscript \
-#op monitor interval=30s \
-#op start timeout=180s \
-#op stop timeout=180s \
-#op status timeout=15s
-
-# Create the monitoring_data resource
-pcs resource create monitoring_data systemd:monitoring_data \
+pcs resource create dmcf_hw_monitoring systemd:dmcf_hw_monitoring \
 op monitor interval=30s \
 op start timeout=180s \
 op stop timeout=180s \
-op status timeout=15s
+op status timeout=15
 
-# Create the hw_monitoring resource
-pcs resource create hw_monitoring systemd:hw_monitoring \
+pcs resource create dmcf_uaf_monitoring systemd:dmcf_uaf_monitoring \
 op monitor interval=30s \
 op start timeout=180s \
 op stop timeout=180s \
-op status timeout=15s
+op status timeout=15
 
-# Colocation and order constraints
-#pcs constraint colocation add shellscript with floating_ip INFINITY
-pcs constraint colocation add monitoring_data with floating_ip INFINITY
-pcs constraint colocation add hw_monitoring with floating_ip INFINITY
-pcs constraint order floating_ip then monitoring_data
-pcs constraint order floating_ip then hw_monitoring
+pcs resource create dmcf_monitoring_data systemd:dmcf_monitoring_data \
+op monitor interval=30s \
+op start timeout=180s \
+op stop timeout=180s \
+op status timeout=15
+
+pcs resource create dmcf_data_to_uaf systemd:dmcf_data_to_uaf \
+op monitor interval=30s \
+op start timeout=180s \
+op stop timeout=180s \
+op status timeout=15
+
+pcs resource create crond systemd:crond \
+op monitor interval=30s \
+op start timeout=180s \
+op stop timeout=180s \
+op status timeout=15
+
+# Colocation Constraints
+pcs constraint colocation add dmcf_hw_monitoring with floating_ip INFINITY
+pcs constraint order floating_ip then dmcf_hw_monitoring
+
+pcs constraint colocation add dmcf_uaf_monitoring with floating_ip INFINITY
+pcs constraint order floating_ip then dmcf_uaf_monitoring
+
+pcs constraint colocation add dmcf_monitoring_data with floating_ip INFINITY
+pcs constraint order floating_ip then dmcf_monitoring_data
+pcs constraint order dmcf_hw_monitoring then dmcf_monitoring_data
+pcs constraint order dmcf_uaf_monitoring then dmcf_monitoring_data
+
+pcs constraint colocation add dmcf_data_to_uaf with floating_ip INFINITY
+pcs constraint order floating_ip then dmcf_data_to_uaf
+
+pcs constraint colocation add crond with floating_ip INFINITY
+pcs constraint order floating_ip then crond
+
+# Location Constraints
+pcs constraint location floating_ip prefer dmcfa
+
 
 pcs cluster start --all
 pcs cluster enable --all

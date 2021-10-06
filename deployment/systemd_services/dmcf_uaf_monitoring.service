@@ -1,0 +1,8 @@
+[Unit]
+Description=UAF monitoring
+
+[Service]
+ExecStart=python3.6 /opt/galsee/DMCF/Monitoring/Monitoring_UAF.py
+
+[Install]
+WantedBy=multi-user.target

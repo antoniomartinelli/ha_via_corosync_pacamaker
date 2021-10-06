@@ -2,7 +2,7 @@
 Description=DMCF Galsee Monitorning Data
 
 [Service]
-ExecStart=python3.6 /home/davide/Desktop/dmcf-galsee-2.0/SW-env/Code/Monitoring_data.py
+ExecStart=python3.6 /opt/galsee/DMCF/DataToUAF/DataDeliveryUAF.py
 
 [Install]
 WantedBy=multi-user.target
