@@ -1,6 +1,4 @@
 #!/bin/bash
-docker system prune --force
-docker volume prune --force
 docker-compose up --build &
 sleep 10
 docker exec -ti node_01 /home/run.sh
